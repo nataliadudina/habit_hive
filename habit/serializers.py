@@ -24,9 +24,10 @@ class HabitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habit
         fields = '__all__'
-        validators = [validators.RelatedHabitAndRewardValidator('related_habit', 'reward'),
-                      validators.RelatedHabitValidator('related_habit'),
-                      validators.LearnedHabitValidator('related_habit', 'is_learned', 'reward')]
+        validators = [validators.RelatedHabitValidator('related_habit'),
+                      validators.RelatedHabitAndRewardValidator('related_habit', 'reward'),
+                      validators.LearnedHabitValidator('related_habit', 'is_learned', 'reward'),
+                      validators.TimeSequenceValidator('related_habit', 'time')]
 
 
 class HabitDetailSerializer(serializers.ModelSerializer):

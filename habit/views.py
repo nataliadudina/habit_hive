@@ -1,9 +1,10 @@
+from django.http import request
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from habit.models import Habit
 from habit.paginators import HabitPaginator
-from habit.permissions import IsAuthenticatedAndOwner
+from habit.permissions import IsOwnerOrReadOnly
 from habit.serializers import HabitSerializer, HabitDetailSerializer
 
 
@@ -31,13 +32,13 @@ class PublicHabitApiList(generics.ListAPIView):
 class HabitDetailApiView(generics.RetrieveAPIView):
     serializer_class = HabitDetailSerializer
     queryset = Habit.objects.all()
-    permission_classes = [IsAuthenticatedAndOwner]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class HabitUpdateApiView(generics.UpdateAPIView):
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
-    permission_classes = [IsAuthenticatedAndOwner]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
@@ -45,4 +46,4 @@ class HabitUpdateApiView(generics.UpdateAPIView):
 
 class HabitDestroyApiView(generics.DestroyAPIView):
     queryset = Habit.objects.all()
-    permission_classes = [IsAuthenticatedAndOwner]
+    permission_classes = [IsOwnerOrReadOnly]
