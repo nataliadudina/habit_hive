@@ -1,4 +1,3 @@
-from django.http import request
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -9,6 +8,7 @@ from habit.serializers import HabitSerializer, HabitDetailSerializer
 
 
 class HabitApiList(generics.ListCreateAPIView):
+    """View for creating a habit or listing all user's habits."""
     serializer_class = HabitSerializer
     pagination_class = HabitPaginator
     permission_classes = [IsAuthenticated]
@@ -21,6 +21,7 @@ class HabitApiList(generics.ListCreateAPIView):
 
 
 class PublicHabitApiList(generics.ListAPIView):
+    """List of published habits"""
     serializer_class = HabitSerializer
     pagination_class = HabitPaginator
     permission_classes = [IsAuthenticated]
@@ -30,12 +31,14 @@ class PublicHabitApiList(generics.ListAPIView):
 
 
 class HabitDetailApiView(generics.RetrieveAPIView):
+    """Shows habit details"""
     serializer_class = HabitDetailSerializer
     queryset = Habit.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
 
 
 class HabitUpdateApiView(generics.UpdateAPIView):
+    """Habit editing"""
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
@@ -45,5 +48,6 @@ class HabitUpdateApiView(generics.UpdateAPIView):
 
 
 class HabitDestroyApiView(generics.DestroyAPIView):
+    """Habit deletion"""
     queryset = Habit.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
