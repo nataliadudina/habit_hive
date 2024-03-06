@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='Email')
     username = models.CharField(max_length=50, blank=True, null=True, default='ghost', verbose_name="Username")
     country = models.CharField(max_length=50, blank=True, null=True, verbose_name='Country')
+    telegram = models.CharField(max_length=150, blank=True, null=True, verbose_name="Telegram username")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
