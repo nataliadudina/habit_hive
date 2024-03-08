@@ -9,14 +9,14 @@ from users.serializers import UserSerializer, UserProfileSerializer
 
 
 class UserApiList(generics.ListAPIView):
-    """ View for listing users. """
+    """ View for listing users """
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
     permission_classes = [IsAuthenticated]
 
 
 class UserRegistrationAPIView(generics.CreateAPIView):
-    """ View for user registration. """
+    """ View for user registration """
     queryset = get_user_model().objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [AllowAny]
@@ -30,7 +30,7 @@ class UserRegistrationAPIView(generics.CreateAPIView):
 
 
 class UserDetailApiList(generics.RetrieveAPIView):
-    """ View for retrieving user details. """
+    """ View for retrieving user details """
     queryset = get_user_model().objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
@@ -48,7 +48,7 @@ class UserDetailApiList(generics.RetrieveAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_serializer_class(self):
-        """ Get the serializer class based on the user. """
+        """ Get the serializer class based on the user """
         user = self.get_object()
 
         if user == self.request.user:
@@ -58,7 +58,7 @@ class UserDetailApiList(generics.RetrieveAPIView):
 
 
 class UserUpdateApiList(generics.UpdateAPIView):
-    """ Update user information. """
+    """ Update user information """
     serializer_class = UserProfileSerializer
     queryset = get_user_model().objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -72,6 +72,6 @@ class UserUpdateApiList(generics.UpdateAPIView):
 
 
 class UserDestroyApiView(generics.DestroyAPIView):
-    """ View for deleting a user. """
+    """ View for deleting a user """
     queryset = get_user_model().objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]

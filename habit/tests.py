@@ -11,12 +11,12 @@ class HabitTestCase(APITestCase):
     def setUp(self) -> None:
         self.client = APIClient()
 
-        # Создание пользователя и его авторизация
+        # User creation and authorization
         self.user = get_user_model().objects.create(email='user@example.com', password='password')
         self.other_user = get_user_model().objects.create(email='other@example.com', password='other_password')
         self.client.force_authenticate(user=self.user)
 
-        # Создание тестовых привычек
+        # Creation test habits
         self.old_habit = Habit.objects.create(
             user=self.user,
             action='brushing my teeth',
@@ -35,7 +35,7 @@ class HabitTestCase(APITestCase):
         )
 
     def test_create_habit(self):
-        """Тестирование создания привычки"""
+        """ Testing habit creation """
         habit_data = {
             'action': 'rolling up a mat for yoga class',
             'time': '16:00',
@@ -47,14 +47,14 @@ class HabitTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # Проверка, что в ответе присутствует созданный урок
+        # Check that the created lesson is present in the response
         self.assertEqual(response.data['action'], habit_data['action'])
         self.assertEqual(response.data['time'], '16:00:00')
         self.assertEqual(response.data['place'], habit_data['place'])
         self.assertEqual(response.data['reward'], habit_data['reward'])
 
     def test_list_habit(self):
-        """ Вывод списка привычек """
+        """ Testing the list of habits output """
         response = self.client.get(reverse('habit:habit-list-create'))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -65,29 +65,29 @@ class HabitTestCase(APITestCase):
         self.assertIn('going to bed before midnight', habits)
 
     def test_public_list_habit(self):
-        """ Вывод списка публичных привычек """
+        """ Testing the list of habits public output """
         response = self.client.get(reverse('habit:public-habit-list'))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Проверка наличия ключа 'results' в ответе
+        # Check if the 'results' key is present in the response
         self.assertIn('results', response.data)
 
-        # Проверка длины списка результатов
+        # Checking the length of the result list
         if response.data['results']:
             self.assertEqual(len(response.data['results']), 1)
         else:
             self.assertEqual(len(response.data['results']), 0)
 
     def test_read_habit(self):
-        """Тестирование просмотра привычки"""
+        """ Habit viewing test """
         response = self.client.get(reverse('habit:habit', kwargs={'pk': self.new_habit.id}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['action'], 'going to bed before midnight')
 
     def test_update_habit(self):
-        """Тестирование редактирования привычки"""
+        """ Habit editing test """
         self.client.force_authenticate(user=self.user)
         habit_data = {
             'is_public': False
@@ -98,7 +98,7 @@ class HabitTestCase(APITestCase):
         self.assertEqual(response.data['is_public'], habit_data['is_public'])
 
     def test_delete_habit(self):
-        """Тестирование удаления привычки"""
+        """ Habit deletion test """
         self.client.force_authenticate(user=self.user)
         url = reverse('habit:habit-delete', kwargs={'pk': self.new_habit.id})
         response = self.client.delete(url)
@@ -108,10 +108,10 @@ class HabitTestCase(APITestCase):
         with self.assertRaises(Habit.DoesNotExist):
             Habit.objects.get(id=self.new_habit.id)
 
-    # Тестирование валидаторов
+    # Validators testing
 
     def test_invalid_reward_or_related_habit(self):
-        """Тестирование отсутствия у новой привычки и вознаграждения, и связанной привычки"""
+        """ Testing the new habit's lack of both reward and bound habit """
 
         habit_data = {
             'action': 'reading a book',
@@ -123,11 +123,11 @@ class HabitTestCase(APITestCase):
 
         response = self.client.post(reverse('habit:habit-list-create'), data=habit_data)
 
-        self.assertIn('You have to add either a related habit or a reward.', response.content.decode())
+        self.assertIn('You may add either a related habit or a reward.', response.content.decode())
         self.assertEqual(response.status_code, 400)
 
     def test_invalid_related_habit(self):
-        """Тестирование, что новая привычка не может быть связанной привычкой"""
+        """ Testing that a new habit can't be a related habit """
 
         habit_data = {
             'action': 'reading a book',
@@ -143,7 +143,7 @@ class HabitTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_no_related_habit_or_reward(self):
-        """Тестирование отсутствия связанной привычки или вознаграждения у выработанной привычки"""
+        """ Testing the absence of a related habit or reward in a learned habit """
 
         habit_data = {
             'action': 'rolling up a mat for yoga class',
@@ -158,8 +158,21 @@ class HabitTestCase(APITestCase):
         self.assertIn("Learned habit should have no related habits or rewards.", response.content.decode())
         self.assertEqual(response.status_code, 400)
 
+    def test_no_related_habit_or_reward_on_update(self):
+        """ Testing the absence of both a related habit and reward on updating the habit """
+        self.client.force_authenticate(user=self.user)
+
+        habit_data = {
+            'reward': 'a glass of juice'
+        }
+
+        response = self.client.patch(reverse('habit:habit-update', kwargs={'pk': self.new_habit.pk}), data=habit_data)
+
+        self.assertIn("You may add either a related habit or a reward.", response.content.decode())
+        self.assertEqual(response.status_code, 400)
+
     def test_invalid_time_sequence(self):
-        """Тестирование, что новая привычка выполняется после связанной привычки"""
+        """ Testing that the new habit is performed after the related habit """
 
         habit_data = {
             'action': 'reading a book',
@@ -174,15 +187,17 @@ class HabitTestCase(APITestCase):
                       response.content.decode())
         self.assertEqual(response.status_code, 400)
 
-    # Тестирование разрешений
+    # Permissions testing
 
     def test_other_user_cannot_update_habit(self):
+        """ Testing that the user can't edit someone else's habits """
         self.client.force_authenticate(user=self.other_user)
         response = self.client.patch(reverse('habit:habit-update', kwargs={'pk': self.new_habit.pk}),
-                                   data={'action': 'updated action'})
+                                     data={'action': 'updated action'})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_other_user_cannot_delete_habit(self):
+        """ Testing that the user can't delete someone else's habits """
         self.client.force_authenticate(user=self.other_user)
         response = self.client.delete(reverse('habit:habit-delete', kwargs={'pk': self.new_habit.pk}))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

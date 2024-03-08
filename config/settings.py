@@ -174,18 +174,18 @@ if CACHE_ENABLED:
     }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+    'http://localhost:8000',  # Замените на адрес фронтенд-сервера
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://read-only.example.com",  # Замените на адрес вашего фронтенд-сервера
+    "https://read-only.example.com",  # Замените на адрес фронтенд-сервера
     "https://read-and-write.example.com"  # и добавьте адрес бэкенд-сервера
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
 CELERY_BEAT_SCHEDULE = {
     'send_notifications': {

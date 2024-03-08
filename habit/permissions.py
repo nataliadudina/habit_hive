@@ -5,11 +5,11 @@ from habit.models import Habit
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
-    Пользователь может видеть и редактировать только свои данные.
+    The user can only see and edit their own data.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Разрешает GET-запросы любому пользователю
+        # Allows GET requests to any user
         if request.method in permissions.SAFE_METHODS:
             return True
 

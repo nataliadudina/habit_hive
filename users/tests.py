@@ -10,9 +10,6 @@ class UserTestCase(APITestCase):
     def setUp(self) -> None:
         self.client = APIClient()
 
-        # self.user = get_user_model().objects.create(email='user@example.com')
-        # self.user.set_password('password')
-        # self.user.save()
         self.user = get_user_model().objects.create(email='user@example.com', password='password')
 
         access_token = str(RefreshToken.for_user(self.user).access_token)
@@ -23,7 +20,7 @@ class UserTestCase(APITestCase):
         self.other_user.save()
 
     def test_view_own_profile(self):
-        """Тестирование просмотра собственного профиля"""
+        """ Testing viewing your own profile """
         response = self.client.get(reverse('users:profile', kwargs={'pk': self.user.pk}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -33,7 +30,7 @@ class UserTestCase(APITestCase):
         self.assertTrue('last_name' in response.data)
 
     def test_view_other_profile(self):
-        """Тестирование просмотра чужого профиля"""
+        """ Testing viewing someone else's profile """
         access_token = str(RefreshToken.for_user(self.other_user).access_token)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token}')
 
@@ -41,14 +38,14 @@ class UserTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Проверяем, что в ответе содержатся только ограниченные поля
+        # Check that the response contains only restricted fields
         self.assertTrue('email' in response.data)
         self.assertTrue('country' in response.data)
         self.assertTrue('public_habits' in response.data)
         self.assertTrue('habits' not in response.data)
 
     def test_edit_own_profile(self):
-        """Тестирование редактирования собственного профиля"""
+        """ Testing editing your own profile """
         user_data = {
             'username': 'User'
         }
@@ -58,7 +55,7 @@ class UserTestCase(APITestCase):
         self.assertEqual(response.data['username'], user_data['username'])
 
     def test_edit_other_profile(self):
-        """Тестирование редактирования чужого профиля"""
+        """ Testing editing someone else's profile """
         user_data = {
             'username': 'User'
         }
@@ -73,7 +70,7 @@ class UserTestCase(APITestCase):
 class UserRegistrationTest(APITestCase):
 
     def test_successful_registration(self):
-        """Тестирование регистрации пользователя"""
+        """ User registration testing """
         user_data = {
             'email': 'user@example.com',
             'password': 'password'

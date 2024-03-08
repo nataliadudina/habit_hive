@@ -5,7 +5,7 @@ from habit.serializers import HabitSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Просмотр публичного профиля пользователя"""
+    """ View public user profile """
     public_habits = serializers.SerializerMethodField()
 
     class Meta:
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Просмотр полного профиля пользователя"""
+    """ View full user profile """
     password = serializers.CharField(write_only=True, required=True)
     habits = HabitSerializer(many=True, read_only=True)
 
