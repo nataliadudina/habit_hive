@@ -22,7 +22,7 @@ class HabitTestCase(APITestCase):
             action='brushing my teeth',
             time='22:30',
             place='bathroom',
-            is_learned=True
+            is_pleasant=True
         )
 
         self.new_habit = Habit.objects.create(
@@ -149,7 +149,7 @@ class HabitTestCase(APITestCase):
             'action': 'rolling up a mat for yoga class',
             'time': '16:00',
             'place': 'at home',
-            'is_learned': True,
+            'is_pleasant': True,
             'reward': 'a glass of juice'
         }
 

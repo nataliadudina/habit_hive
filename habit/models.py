@@ -14,7 +14,7 @@ class Habit(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name='Description')
     related_habit = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='new_habit', verbose_name='Linked Habit')
-    is_learned = models.BooleanField(default=False, verbose_name='Is Learned')
+    is_pleasant = models.BooleanField(default=False, verbose_name='Is Learned')
     reward = models.CharField(max_length=255, null=True, blank=True, verbose_name='Reward')
     is_public = models.BooleanField(default=False, verbose_name='Is Public')
 
