@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "habit-hive"
+version = "0.1.0"
+description = "habit reminder app"
+authors = ["Natalia D"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "4.2.7"
+psycopg2 = "^2.9.9"
+ipython = "^8.21.0"
+djangorestframework = "^3.14.0"
+python-dotenv = "^1.0.1"
+djangorestframework-simplejwt = "^5.3.1"
+flake8 = "^7.0.0"
+coverage = "^7.4.3"
+drf-yasg = "^1.21.7"
+django-cors-headers = "^4.3.1"
+celery = "^5.3.6"
+redis = "^5.0.2"
+hiredis = "^2.3.2"
+eventlet = "^0.35.2"
+django-celery-beat = "^2.6.0"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
