@@ -22,16 +22,10 @@ def send_reminder():
         for habit in habits_due_now:
             chat_id = user.telegram
             message = f"It's time to do {habit.action}."
-            print(message)
             try:
-                response = requests.post(
-                    url=f'{URL}{TOKEN}/sendMessage',
-                    data={
-                        'chat_id': chat_id,
-                        'text': message
-                    }
+                requests.post(
+                    url=f'{URL}{TOKEN}/sendMessage?chat_id={chat_id}&text={message}'
                 )
-                print(response.json())
             except requests.exceptions.RequestException as e:
                 # Log the error or handle it as needed
                 print(f"Failed to send message to {chat_id}: {e}")
