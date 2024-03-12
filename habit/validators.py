@@ -27,11 +27,11 @@ class RelatedHabitValidator:
 
         if related_habit and not related_habit.is_pleasant:
             raise ValidationError(
-                f"Habit '{related_habit.action}' is not pleasant to become a related habit.")
+                f'Habit {related_habit.action} is not pleasant to become a related habit.')
 
 
 class PleasantHabitValidator:
-    """ Checks that the learned habit does not have an related habit or reward """
+    """ Checks that the pleasant habit does not have a related habit or reward """
 
     def __init__(self, related_habit, is_pleasant, reward):
         self.related_habit = related_habit
@@ -49,7 +49,7 @@ class PleasantHabitValidator:
 
 
 class TimeSequenceValidator:
-    """ Checks that the new habit is performed after the learned habit """
+    """ Checks that the new habit is performed after the pleasant habit """
 
     def __init__(self, related_habit, time):
         self.related_habit = related_habit
