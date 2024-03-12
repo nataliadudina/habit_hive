@@ -47,7 +47,7 @@ class HabitTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # Check that the created lesson is present in the response
+        # Check that the created habit data is present in the response
         self.assertEqual(response.data['action'], habit_data['action'])
         self.assertEqual(response.data['time'], '16:00:00')
         self.assertEqual(response.data['place'], habit_data['place'])
@@ -138,7 +138,7 @@ class HabitTestCase(APITestCase):
 
         response = self.client.post(reverse('habit:habit-list-create'), data=habit_data)
 
-        self.assertIn(f"Habit '{self.new_habit.action}' is pleasant to become a related habit.",
+        self.assertIn(f'Habit {self.new_habit.action} is pleasant to become a related habit.',
                       response.content.decode())
         self.assertEqual(response.status_code, 400)
 
