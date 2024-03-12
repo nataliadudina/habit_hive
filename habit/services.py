@@ -16,7 +16,6 @@ def get_habits_due_now(user):
         start_from__lte=current_time.date(),
         time__hour=current_time.hour,
         time__minute=current_time.minute,
-        is_learned=False,
     ).annotate(
         new_date=Case(
             When(frequency=1, then=F('start_from') + timedelta(days=1)),
