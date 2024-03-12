@@ -138,7 +138,7 @@ class HabitTestCase(APITestCase):
 
         response = self.client.post(reverse('habit:habit-list-create'), data=habit_data)
 
-        self.assertIn(f'Habit {self.new_habit.action} is pleasant to become a related habit.',
+        self.assertIn(f'Habit {self.new_habit.action} is not pleasant to become a related habit.',
                       response.content.decode())
         self.assertEqual(response.status_code, 400)
 
