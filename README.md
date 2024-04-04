@@ -27,22 +27,21 @@ Habit Hive - трекер привычек. Пользователь может 
 - **Redis**
 - **django-celery-beat**
 
+###  Предварительная установка
+
++ Установленный Docker
++ Установленный Docker Compose
+
+
 ###  Установка и использование
 
 + Клонируйте репозиторий: git clone git@github.com:nataliadudina/habit_hive.git
 + Перейдите в каталог проекта: cd habit_hive
-+ Создайте (python3 -m venv env) и активируйте  (.\env\Scripts\activate) виртуальное окружение
-+ Активируйте виртуальное окружение: source env/bin/activate (Linux/Mac) или .\env\Scripts\activate (Windows)
-+ Установите зависимости: poetry install (требуется предварительная установка poetry)
-+ Настройте переменные окружения: создайте файл `.env` в корне проекта и добавьте необходимые переменные окружения
-+ Примените миграции: python manage.py migrate
-+ Создайте суперпользователя: python manage.py csu
-+ Запустите сервер: python manage.py runserver
-+ Запустите брокер Redis: sudo service redis-server start
-+ Запустите Celery worker: celery -A your_project_name worker --loglevel=info
-+ Запустите Celery beat для планирования периодических задач: celery -A your_project_name beat -l info
++ Создайте файл .env в корневой директории проекта и добавьте в него необходимые переменные окружения. Пример содержимого файла `.env` есть в файле `.env.sample`
++ Соберите и запустите контейнеры: docker-compose up --build
++ После успешного запуска контейнеров приложение будет доступно по адресу http://localhost:8000.
++ Чтобы остановить и удалить контейнеры, выполните: docker-compose down
 
-    Пример содержимого файла `.env` в файле `.env.sample`
 ---
 
 ### Структура проекта
