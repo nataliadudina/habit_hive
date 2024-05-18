@@ -22,7 +22,7 @@ class HabitTestCase(APITestCase):
             action='brushing my teeth',
             time='22:30',
             place='bathroom',
-            is_pleasant=True
+            is_learned=True
         )
 
         self.new_habit = Habit.objects.create(
@@ -138,24 +138,24 @@ class HabitTestCase(APITestCase):
 
         response = self.client.post(reverse('habit:habit-list-create'), data=habit_data)
 
-        self.assertIn(f"Habit '{self.new_habit.action}' is not pleasant to become a related habit.",
+        self.assertIn(f"Habit '{self.new_habit.action}' is not learned yet to become a related habit.",
                       response.content.decode())
         self.assertEqual(response.status_code, 400)
 
     def test_no_related_habit_or_reward(self):
-        """ Testing the absence of a related habit or reward in a pleasant habit """
+        """ Testing the absence of a related habit or reward in a learned habit """
 
         habit_data = {
             'action': 'rolling up a mat for yoga class',
             'time': '16:00',
             'place': 'at home',
-            'is_pleasant': True,
+            'is_learned': True,
             'reward': 'a glass of juice'
         }
 
         response = self.client.post(reverse('habit:habit-list-create'), data=habit_data)
 
-        self.assertIn("Pleasant habit should have no related habits or rewards.", response.content.decode())
+        self.assertIn("Learned habit should have no related habits or rewards.", response.content.decode())
         self.assertEqual(response.status_code, 400)
 
     def test_no_related_habit_or_reward_on_update(self):

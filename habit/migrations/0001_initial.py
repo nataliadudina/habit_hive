@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('estimated_time', models.PositiveSmallIntegerField(default=120, validators=[django.core.validators.MaxValueValidator(120)])),
                 ('start_from', models.DateField(auto_now_add=True)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('is_pleasant', models.BooleanField(default=False)),
+                ('is_learned', models.BooleanField(default=False)),
                 ('reward', models.CharField(blank=True, max_length=255, null=True)),
                 ('is_public', models.BooleanField(default=False)),
                 ('related_habit', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='new_habit', to='habit.habit')),

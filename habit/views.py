@@ -55,7 +55,7 @@ class HabitUpdateApiView(generics.UpdateAPIView):
         elif reward and 'related_habit' in serializer.validated_data:
             raise ValidationError('You may add either a related habit or a reward.')
 
-        if instance.is_pleasant:
+        if instance.is_learned:
             if 'reward' in serializer.validated_data or 'related_habit' in serializer.validated_data:
                 raise ValidationError('Learned habit should have no related habits or rewards.')
 
