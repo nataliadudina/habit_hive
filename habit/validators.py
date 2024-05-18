@@ -17,7 +17,7 @@ class RelatedHabitAndRewardValidator:
 
 
 class RelatedHabitValidator:
-    """ Verify that the related habit is a pleasant habit """
+    """ Verify that the related habit is a learned habit """
 
     def __init__(self, related_habit):
         self.related_habit = related_habit
@@ -25,31 +25,31 @@ class RelatedHabitValidator:
     def __call__(self, data):
         related_habit = data.get(self.related_habit)
 
-        if related_habit and not related_habit.is_pleasant:
+        if related_habit and not related_habit.is_learned:
             raise ValidationError(
-                f'Habit {related_habit.action} is not pleasant to become a related habit.')
+                f"Habit '{related_habit.action}' is not learned yet to become a related habit.")
 
 
-class PleasantHabitValidator:
-    """ Checks that the pleasant habit does not have a related habit or reward """
+class LearnedHabitValidator:
+    """ Checks that the learned habit does not have an related habit or reward """
 
-    def __init__(self, related_habit, is_pleasant, reward):
+    def __init__(self, related_habit, is_learned, reward):
         self.related_habit = related_habit
-        self.is_pleasant = is_pleasant
+        self.is_learned = is_learned
         self.reward = reward
 
     def __call__(self, data):
         related_habit = data.get(self.related_habit)
-        is_pleasant = data.get(self.is_pleasant)
+        is_learned = data.get(self.is_learned)
         reward = data.get(self.reward)
 
-        if is_pleasant:
+        if is_learned:
             if related_habit or reward:
-                raise ValidationError('Pleasant habit should have no related habits or rewards.')
+                raise ValidationError('Learned habit should have no related habits or rewards.')
 
 
 class TimeSequenceValidator:
-    """ Checks that the new habit is performed after the pleasant habit """
+    """ Checks that the new habit is performed after the learned habit """
 
     def __init__(self, related_habit, time):
         self.related_habit = related_habit
